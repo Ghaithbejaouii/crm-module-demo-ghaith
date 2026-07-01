@@ -4,6 +4,7 @@ import { api, ApiError } from "@/lib/api";
 import { Opportunite } from "@/lib/types";
 import { EtapeBadge, ProblemeBadge } from "@/components/Badge";
 import { LABELS_ETAPE, COULEURS_ETAPE, formatMontant, formatDate, nomClient } from "@/lib/format";
+import { DeleteButton } from "@/components/DeleteButton";
 
 export default async function OpportuniteDetailPage({
   params,
@@ -46,6 +47,7 @@ export default async function OpportuniteDetailPage({
         >
           Modifier
         </Link>
+        <DeleteButton id={id} />
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-4">
