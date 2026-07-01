@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TypeClient {
+  ENTREPRISE
+  PARTICULIER
+}
+
+enum EtapePipeline {
+  PROSPECTION
+  QUALIFICATION
+  PROPOSITION
+  NEGOCIATION
+  GAGNE
+  PERDU
+}
+
+model Client {
+  id              String        @id @default(uuid())
+  type            TypeClient
+  // Champs communs
+  email           String?
+  telephone       String?
+  adresse         String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  // Champs particulier
+  nom             String?
+  prenom          String?
+  // Champs entreprise
+  raisonSociale   String?
+  siret           String?
+  secteurActivite String?
+  nomContact      String?
+
+  opportunites    Opportunite[]
+
+  @@map("clients")
+}
+
+model Opportunite {
+  id                   String        @id @default(uuid())
+  titre                String
+  montant              Decimal       @db.Decimal(12, 2)
+  dateSignaturePrevue  DateTime
+  etape                EtapePipeline @default(PROSPECTION)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  clientId             String
+  client               Client        @relation(fields: [clientId], references: [id])
+
+  @@map("opportunites")
+}
